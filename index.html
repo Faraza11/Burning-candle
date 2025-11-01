@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced CSS Candle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="stars" id="stars"></div>
+    <h2>Enhanced Burning Candle</h2>
+    <div class="message">Click the candle to blow it out and click again to relight</div>
+    
+    <div class="candle-container">
+        <div class="candle" id="candle">
+            <div class="wick"></div>
+            <div class="flame" id="flame"></div>
+            <div class="glow" id="glow"></div>
+            <div class="smoke" id="smoke"></div>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <button id="blowBtn">Blow Out</button>
+        <button id="relightBtn">Relight</button>
+    </div>
+
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 5 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Candle interaction
+        const candle = document.getElementById('candle');
+        const flame = document.getElementById('flame');
+        const glow = document.getElementById('glow');
+        const smoke = document.getElementById('smoke');
+        const blowBtn = document.getElementById('blowBtn');
+        const relightBtn = document.getElementById('relightBtn');
+        
+        let isLit = true;
+        
+        function blowOut() {
+            if (!isLit) return;
+            
+            isLit = false;
+            flame.style.animation = 'none';
+            flame.style.opacity = '0';
+            glow.style.animation = 'none';
+            glow.style.opacity = '0';
+            
+            // Create smoke effect
+            smoke.style.animation = 'smokeRise 4s forwards';
+            
+            setTimeout(() => {
+                smoke.style.animation = 'none';
+            }, 4000);
+        }
+        
+        function relight() {
+            if (isLit) return;
+            
+            isLit = true;
+            flame.style.animation = 'flicker 1.5s infinite alternate ease-in-out';
+            flame.style.opacity = '1';
+            glow.style.animation = 'glowPulse 2s infinite alternate';
+            glow.style.opacity = '0.6';
+        }
+        
+        // Event listeners
+        candle.addEventListener('click', blowOut);
+        blowBtn.addEventListener('click', blowOut);
+        relightBtn.addEventListener('click', relight);
+        
+        // Add multiple smoke elements for more realistic effect
+        for (let i = 0; i < 3; i++) {
+            const newSmoke = smoke.cloneNode(true);
+            newSmoke.style.animationDelay = (i * 1.5) + 's';
+            candle.appendChild(newSmoke);
+        }
+    </script>
+</body>
+</html>
